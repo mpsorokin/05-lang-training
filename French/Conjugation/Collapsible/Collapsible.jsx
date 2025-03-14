@@ -1,28 +1,25 @@
-import React, { Component } from 'react';
+import React, { useState, useCallback } from 'react';
 import './Collapsible.css';
 
-class Collapsible extends Component {
-  state = {
-    isOpened: false,
-  };
+function Collapsible({ title, content }) {
+  const [isOpened, setIsOpened] = useState(false);
 
-  toggleContent = () => {
-    let oldState = this.state.isOpened;
-    this.setState({isOpened: !oldState});
-  };
+  const toggleContent = useCallback(() => {
+    setIsOpened(prevState => !prevState);
+  }, []);
 
-  render() {
-    const displayContent = this.state.isOpened ?
-      <div className="collapsible-content">
-        {this.props.content || 'default content'}
-      </div>
-    : '';
+  const displayContent = isOpened ? (
+    <div className="collapsible-content">
+      {content || 'default content'}
+    </div>
+  ) : null;
 
-    return <div className="collapsible-container">
-      <button onClick={this.toggleContent} className="collapsible-button">{this.props.title || 'Open Section 1'}</button>
+  return (
+    <div className="collapsible-container">
+      <button onClick={toggleContent} className="collapsible-button">{title || 'Open Section 1'}</button>
       {displayContent}
-    </div>;
-  }
+    </div>
+  );
 }
 
 export default Collapsible;

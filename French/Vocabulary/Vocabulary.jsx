@@ -1,41 +1,39 @@
-import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useMatch } from 'react-router-dom';
 
 // Import Data file
 import frenchVocabData from '../../data_source/french_vocabulary_data';
 
-class FrenchVocabulary extends Component {
-  state = {
-    vocabulary: {}
-  };
+const FrenchVocabulary = () => {
+  const [vocabulary, setVocabulary] = useState({});
+  const match = useMatch('/french/*');
 
-  componentWillMount() {
-    this.setState({vocabulary: frenchVocabData})
-  }
+  useEffect(() => {
+    setVocabulary(frenchVocabData);
+  }, []);
 
-  render() {
-    const courses_list = this.state.vocabulary.courses;
+  const coursesList = vocabulary.courses?.map(course => {
+    const courseWordsArray = course.lessons.map(lesson => lesson.words.length);
+    const wordsCount = courseWordsArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-    const showCoursesList = courses_list.map(course => {
-      const courseWordsArray = course.lessons.map(lesson => lesson.words.length);
-      const wordsCount = courseWordsArray.reduce((accumulator, currentValue) => accumulator + currentValue);
-      return <li>
-        <Link to={`${this.props.match.url}/${course.url}`}>{course.name}</Link>
+    return (
+      <li key={course.url}>
+        <Link to={`${match.url}/${course.url}`}>{course.name}</Link>
         <p>{wordsCount} words</p>
       </li>
-    });
+    );
+  });
 
-    const localNav = <div className="english_nav">
-      <ul>
-        {showCoursesList}
-      </ul>
-    </div>;
-
-    return <div className="vocabulary_container">
+  return (
+    <div className="vocabulary_container">
       <h2>French Vocabulary</h2>
-      {localNav}
-    </div>;
-  }
-}
+      <div className="english_nav">
+        <ul>
+          {coursesList}
+        </ul>
+      </div>
+    </div>
+  );
+};
 
 export default FrenchVocabulary;

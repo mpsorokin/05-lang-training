@@ -1,26 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './French.css';
-import { Link } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 
-class French extends Component {
-  render() {
-    const localNav = <div className="english_nav">
+function French() {
+  const match = useMatch('/french/*');
+
+  const localNav = (
+    <div className="english_nav">
       <ul>
         <li>
-          <Link to={`${this.props.match.url}/vocabulary`}> Vocabulary </Link>
+          <Link to={`${match.pathname}/vocabulary`}> Vocabulary </Link>
         </li>
         <li>
-          <Link to={`${this.props.match.url}/conjugation`}> Conjugation </Link>
+          <Link to={`${match.pathname}/conjugation`}> Conjugation </Link>
         </li>
       </ul>
-    </div>;
+    </div>
+  );
 
-    return <div>
+  return (
+    <div>
       <h3>French</h3>
       {localNav}
-    </div>;
-
-  }
+    </div>
+  );
 }
 
 export default French;

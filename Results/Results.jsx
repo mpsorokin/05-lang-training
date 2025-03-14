@@ -1,29 +1,34 @@
-import React, { Component } from 'react';
+import React, { useCallback } from 'react';
 import './Results.css';
 
-class Results extends Component {
+function Results() {
 
-  localizeDate = (timestamp) => {
-    let outputDate = new Date(+timestamp);
-    let parsed = `${outputDate.getDate()}/${outputDate.getMonth() + 1}/${outputDate.getFullYear()}  ${outputDate.getHours()}:${outputDate.getMinutes()}`;
-    return parsed;
-  };
+  const localizeDate = useCallback((timestamp) => {
+    const outputDate = new Date(+timestamp);
+    return `${outputDate.getDate()}/${outputDate.getMonth() + 1}/${outputDate.getFullYear()}  ${outputDate.getHours()}:${outputDate.getMinutes()}`;
+  }, []);
 
-  render() {
-    const localData = JSON.parse(localStorage.getItem('languageTest'));
+  const localData = JSON.parse(localStorage.getItem('languageTest')) || { result: [] };
 
-    const tableRows = localData.result.map(row => {
-      return <tr>
-        <td>{row.course}</td>
-        <td>{row.lesson}</td>
-        <td>{row.typeLesson}</td>
-        <td className="success_rate_td">{row.success.toFixed(2)} %</td>
-        <td className="wrong_answers">{row.wrongAnswers.map(span => <span className="table_wrong_answers">{span}</span>)}</td>
-        <td className="table_date">{this.localizeDate(row.date)}</td>
-      </tr>
-    });
-    const resultsTable = <React.Fragment>
+  const tableRows = localData.result.map((row, index) => (
+    <tr key={index}>
+      <td>{row.course}</td>
+      <td>{row.lesson}</td>
+      <td>{row.typeLesson}</td>
+      <td className="success_rate_td">{row.success.toFixed(2)} %</td>
+      <td className="wrong_answers">
+        {row.wrongAnswers.map((span, index2) => (
+          <span key={index2} className="table_wrong_answers">{span}</span>
+        ))}
+      </td>
+      <td className="table_date">{localizeDate(row.date)}</td>
+    </tr>
+  ));
+
+  const resultsTable = (
+    <>
       <table>
+        <thead>
         <tr>
           <th>Course</th>
           <th>Lesson</th>
@@ -32,15 +37,20 @@ class Results extends Component {
           <th>Wrong answers</th>
           <th>Date</th>
         </tr>
+        </thead>
+        <tbody>
         {tableRows}
+        </tbody>
       </table>
-    </React.Fragment>;
+    </>
+  );
 
-    return <div className="results_container">
+  return (
+    <div className="results_container">
       <h3>My results</h3>
       {resultsTable}
-    </div>;
-  }
+    </div>
+  );
 }
 
 export default Results;
