@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 
-const LessonTypes = () => {
-  const { courseId } = useParams(); // Get courseId from the URL params
-  const location = useLocation(); // Get the current location
+function LessonTypes() {
+  const { courseId, unitId } = useParams();
+  const location = useLocation();
 
   const backLink = `/english/vocabulary/${courseId}`;
-  const baseUrl = location.pathname;
+  const baseUrl = `/english/vocabulary/${courseId}/${unitId}`;
+
 
   return (
     <div>
@@ -29,6 +30,6 @@ const LessonTypes = () => {
       </div>
     </div>
   );
-};
+}
 
 export default LessonTypes;

@@ -1,36 +1,35 @@
-import React, { Component } from 'react';
+import React, { useState, useCallback } from 'react';
 import './SingleCard.css';
 
-class SingleCard extends Component {
-  state = {
-    showForeign: false
-  };
+function SingleCard({ currentWord, onNextWord }) {
+  const [showForeign, setShowForeign] = useState(false);
 
-  rotateCard = () => {
-    let oldShowForeign = this.state.showForeign;
-    return this.setState({showForeign: !oldShowForeign});
-  };
+  const rotateCard = useCallback(() => {
+    setShowForeign(prevState => !prevState);
+  }, []);
 
-  nextCard = () => {
-    this.setState({showForeign: false});
-    this.props.onNextWord();
-  };
+  const nextCard = useCallback(() => {
+    setShowForeign(false);
+    onNextWord();
+  }, [onNextWord]);
 
-  render() {
-    const cardContent = this.state.showForeign ?
-      <h3>{this.props.currentWord ? this.props.currentWord.english : ''}</h3> :
-      <h3>{this.props.currentWord ? this.props.currentWord.russian : ''}</h3>;
+  const cardContent = showForeign ? (
+    <h3>{currentWord ? currentWord.english : ''}</h3>
+  ) : (
+    <h3>{currentWord ? currentWord.russian : ''}</h3>
+  );
 
-    return <div className="single_card_container">
-      <div className="card_container" >
+  return (
+    <div className="single_card_container">
+      <div className="card_container">
         {cardContent}
       </div>
       <div className="button_container">
-        <div onClick={this.rotateCard} className="button_rotate">Rotate</div>
-        <div onClick={this.nextCard} className="button_next">Next</div>
+        <div onClick={rotateCard} className="button_rotate">Rotate</div>
+        <div onClick={nextCard} className="button_next">Next</div>
       </div>
-    </div>;
-  }
+    </div>
+  );
 }
 
 export default SingleCard;

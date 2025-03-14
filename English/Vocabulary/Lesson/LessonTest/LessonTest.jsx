@@ -1,68 +1,62 @@
-import React, { Component } from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import './LessonTest.css';
 import ProgressBar from '../../../../framework/ProgressBar/ProgressBar.jsx';
 import img_avatar from './img_avatar.png';
 
-class LessonTest extends Component {
-  state = {
-    wrongAnswers: [],
-    clickedAnswer: '1',
-    rightAnswer: '',
-    wrongAnswer: '1',
-    isTestStarted: false,
-    isTestCompleted: false,
-    currentQuestion: 0,
-    rightAnswers: 0,
-    showRightAnswer: false,
-    isGreenRightAnswer: false,
-    isContinueButton: false,
-    isContinueButtonDisabled: false,
-  };
+function LessonTest({ courseId, lessonId, testInfo, currentFinalTest }) {
+  const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [clickedAnswer, setClickedAnswer] = useState('1');
+  const [rightAnswer, setRightAnswer] = useState('');
+  const [wrongAnswer, setWrongAnswer] = useState('1');
+  const [isTestStarted, setIsTestStarted] = useState(false);
+  const [isTestCompleted, setIsTestCompleted] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [rightAnswers, setRightAnswers] = useState(0);
+  const [showRightAnswer, setShowRightAnswer] = useState(false);
+  const [isGreenRightAnswer, setIsGreenRightAnswer] = useState(false);
+  const [isContinueButton, setIsContinueButton] = useState(false);
+  const [isContinueButtonDisabled, setIsContinueButtonDisabled] = useState(false);
 
-  componentDidMount() {
-    this.setState({ rightAnswer: this.props.currentFinalTest[0].rightAnswer });
-    this.handleStartTest();
-  }
+  useEffect(() => {
+    setRightAnswer(currentFinalTest[0]?.rightAnswer || '');
+  }, [currentFinalTest]);
 
-  handleStartTest = () => {
-    this.setState({ isTestStarted: true });
-  };
 
-  setDefaultStateBeforeNextQuestion = () => {
-    this.setState({
-      clickedAnswer: '1',
-      isGreenRightAnswer: false,
-      showRightAnswer: false,
-      wrongAnswer: '1',
-      isContinueButton: false,
-    });
-  };
+  const handleStartTest = useCallback(() => {
+    setIsTestStarted(true);
+  }, []);
 
-  handleNextQuestion = () => {
-    this.setDefaultStateBeforeNextQuestion();
-    const newQuestion = this.state.currentQuestion + 1;
-    const questionsLength = this.props.currentFinalTest.length;
+  const setDefaultStateBeforeNextQuestion = useCallback(() => {
+    setClickedAnswer('1');
+    setIsGreenRightAnswer(false);
+    setShowRightAnswer(false);
+    setWrongAnswer('1');
+    setIsContinueButton(false);
+  }, []);
+
+  const handleNextQuestion = useCallback(() => {
+    setDefaultStateBeforeNextQuestion();
+    const newQuestion = currentQuestion + 1;
+    const questionsLength = currentFinalTest.length;
 
     if (newQuestion < questionsLength) {
-      this.setState({ currentQuestion: newQuestion });
+      setCurrentQuestion(newQuestion);
     } else {
-      this.setState({ isTestStarted: false, isTestCompleted: true });
-      this.pushResultLocalStorage();
+      setIsTestStarted(false);
+      setIsTestCompleted(true);
+      pushResultLocalStorage();
     }
-  };
+  }, [currentQuestion, currentFinalTest.length, setDefaultStateBeforeNextQuestion]);
 
-  pushToWrongAnswers = (item) => {
-    this.setState((prevState) => ({
-      wrongAnswers: [...prevState.wrongAnswers, item],
-    }));
-  };
+  const pushToWrongAnswers = useCallback((item) => {
+    setWrongAnswers(prevWrongAnswers => [...prevWrongAnswers, item]);
+  }, []);
 
-  pushResultLocalStorage = () => {
+  const pushResultLocalStorage = useCallback(() => {
     const storage = { result: [] };
     let getLocalStorage = JSON.parse(localStorage.getItem('languageTest')) || storage;
     const currentDate = Date.now().toString();
-    const successRate = (this.state.rightAnswers * 100) / (this.state.rightAnswers + this.state.wrongAnswers.length);
-    const { courseId, lessonId } = this.props;
+    const successRate = (rightAnswers * 100) / (rightAnswers + wrongAnswers.length);
     const lessonType = 'Multiple choice';
 
     const testResult = {
@@ -71,157 +65,155 @@ class LessonTest extends Component {
       lesson: lessonId,
       typeLesson: lessonType,
       success: successRate,
-      wrongAnswers: this.state.wrongAnswers,
+      wrongAnswers: wrongAnswers,
     };
 
     getLocalStorage.result.push(testResult);
     localStorage.setItem('languageTest', JSON.stringify(getLocalStorage));
-  };
+  }, [courseId, lessonId, rightAnswers, wrongAnswers]);
 
-  checkCurrentQuestionAnswer = (question) => {
-    this.setState({ clickedAnswer: question });
-  };
+  const checkCurrentQuestionAnswer = useCallback((question) => {
+    setClickedAnswer(question);
+  }, []);
 
-  checkButtonQuestion = () => {
-    const rightAnswer = this.props.currentFinalTest[this.state.currentQuestion].rightAnswer;
-    this.setState({ isContinueButton: true, isGreenRightAnswer: true });
+  const checkButtonQuestion = useCallback(() => {
+    const rightAnswerValue = currentFinalTest[currentQuestion].rightAnswer;
+    setIsContinueButton(true);
+    setIsGreenRightAnswer(true);
 
-    if (this.state.clickedAnswer === rightAnswer) {
-      this.setState((prevState) => ({ rightAnswers: prevState.rightAnswers + 1, isContinueButtonDisabled: true }));
+    if (clickedAnswer === rightAnswerValue) {
+      setRightAnswers(prevRightAnswers => prevRightAnswers + 1);
+      setIsContinueButtonDisabled(true);
       setTimeout(() => {
-        this.handleNextQuestion();
-        this.setState({ isContinueButtonDisabled: false });
+        handleNextQuestion();
+        setIsContinueButtonDisabled(false);
       }, 500);
     } else {
-      this.setState({ wrongAnswer: this.state.clickedAnswer });
-      this.pushToWrongAnswers(rightAnswer);
+      setWrongAnswer(clickedAnswer);
+      pushToWrongAnswers(rightAnswerValue);
     }
-  };
+  }, [clickedAnswer, currentFinalTest, currentQuestion, handleNextQuestion, pushToWrongAnswers]);
 
-  goBack = () => window.history.back();
 
-  render() {
-    const currentQuestion = this.props.currentFinalTest[this.state.currentQuestion];
-    const currentVariants = currentQuestion.variants;
-    const rightAnswer = currentQuestion.rightAnswer;
+  const goBack = useCallback(() => window.history.back(), []);
 
-    // Show results
-    const renderSummary = (
-      <div>
-        <p>You completed a test!</p>
-        <p>
-          You have scored: {this.state.rightAnswers} of {this.props.currentFinalTest.length}
-        </p>
-      </div>
-    );
+  const item = currentFinalTest[currentQuestion];
+  const currentVariants = item?.variants || [];
+  const correctAnswer = item?.rightAnswer;
 
-    const showCorrectAnswer = this.state.showRightAnswer ? (
-      <React.Fragment>
-        <p>Right: {currentQuestion.rightAnswer}</p>
-      </React.Fragment>
-    ) : (
-      ''
-    );
+  const renderSummary = (
+    <div>
+      <p>You completed a test!</p>
+      <p>
+        You have scored: {rightAnswers} of {currentFinalTest.length}
+      </p>
+    </div>
+  );
 
-    const checkButtonClass = this.state.clickedAnswer !== '1' ? 'check_active' : 'check_inactive';
-    const checkButton = (
+  const showCorrectAnswer = showRightAnswer ? (
+    <React.Fragment>
+      <p>Right: {item.rightAnswer}</p>
+    </React.Fragment>
+  ) : null;
+
+  const checkButtonClass = clickedAnswer !== '1' ? 'check_active' : 'check_inactive';
+  const checkButton = (
+    <button
+      className={`btn ${checkButtonClass}`}
+      onClick={checkButtonQuestion}
+      disabled={clickedAnswer === '1'}
+    >
+      Check
+    </button>
+  );
+
+  const continueButton = (
+    <div>
       <button
-        className={`btn ${checkButtonClass}`}
-        onClick={this.checkButtonQuestion}
-        disabled={this.state.clickedAnswer === '1'}
+        className={'btn check_active'}
+        onClick={handleNextQuestion}
+        disabled={isContinueButtonDisabled}
       >
-        Check
+        Continue
       </button>
-    );
+    </div>
+  );
 
-    const continueButton = (
-      <div>
-        <button
-          className={'btn check_active'}
-          onClick={this.handleNextQuestion}
-          disabled={this.state.isContinueButtonDisabled}
-        >
-          Continue
-        </button>
+  const checkOrContinue = isContinueButton ? continueButton : checkButton;
+
+  const showVariants = (
+    <div className="questionVariantsContainer">
+      {currentVariants.map((singleQuestion) => {
+        const additionalClass =
+          wrongAnswer === singleQuestion
+            ? 'wrong_answer'
+            : isContinueButton && (clickedAnswer === singleQuestion || correctAnswer === singleQuestion)
+              ? 'right_answer'
+              : clickedAnswer === singleQuestion
+                ? 'selected_button'
+                : 'blank';
+
+        return (
+          <button
+            key={singleQuestion}
+            className={`btn ${additionalClass}`}
+            onClick={() => checkCurrentQuestionAnswer(singleQuestion)}
+          >
+            {singleQuestion}
+          </button>
+        );
+      })}
+      {checkOrContinue}
+    </div>
+  );
+
+  const questionContainer = (
+    <div className="question_container">
+      <div className="question_container_box">
+        <p>{item?.question}</p>
       </div>
-    );
-
-    const checkOrContinue = this.state.isContinueButton ? continueButton : checkButton;
-
-    const showVariants = (
-      <div className="questionVariantsContainer">
-        {currentVariants.map((singleQuestion) => {
-          const additionalClass =
-            this.state.wrongAnswer === singleQuestion
-              ? 'wrong_answer'
-              : this.state.isContinueButton && this.state.clickedAnswer === singleQuestion ||
-              this.state.isContinueButton && rightAnswer === singleQuestion
-                ? 'right_answer'
-                : this.state.clickedAnswer === singleQuestion
-                  ? 'selected_button'
-                  : 'blank';
-
-          return (
-            <button
-              className={`btn ${additionalClass}`}
-              onClick={() => this.checkCurrentQuestionAnswer(singleQuestion)}
-            >
-              {singleQuestion}
-            </button>
-          );
-        })}
-        {checkOrContinue}
+      <div className="question_container_heads">
+        <img src={img_avatar} alt="" />
       </div>
-    );
+    </div>
+  );
 
-    const questionContainer = (
-      <div className="question_container">
-        <div className="question_container_box">
-          <p>{currentQuestion.question}</p>
-        </div>
-        <div className="question_container_heads">
-          <img src={img_avatar} alt="" />
-        </div>
-      </div>
-    );
+  const renderedQuestion = (
+    <div>
+      {questionContainer}
+      {showCorrectAnswer}
+      {!showRightAnswer && showVariants}
+    </div>
+  );
 
-    // Render Single Question
-    const renderedQuestion = (
-      <div>
-        {questionContainer}
-        {showCorrectAnswer}
-        {!this.state.showRightAnswer && showVariants}
-      </div>
-    );
+  const localProgressBar = (
+    <ProgressBar
+      itemsLength={currentFinalTest.length}
+      currentItem={currentQuestion}
+      pushedBack={goBack}
+    />
+  );
 
-    const localProgressBar = (
-      <ProgressBar
-        itemsLength={this.props.currentFinalTest.length}
-        currentItem={this.state.currentQuestion}
-        pushedBack={this.goBack}
-      />
-    );
+  const showTest = isTestStarted ? (
+    <div>
+      {localProgressBar}
+      <p className="single_test_heading">Choose the right answer</p>
+      {renderedQuestion}
+    </div>
+  ) : isTestCompleted ? (
+    renderSummary
+  ) : (
+    <>
+      {testInfo}
+      <button onClick={handleStartTest} className="btn success">
+        Start test now
+      </button>
+    </>
+  );
 
-    // Control all test state
-    const showTest = this.state.isTestStarted ? (
-      <div>
-        {localProgressBar}
-        <p className="single_test_heading">Choose the right answer</p>
-        {renderedQuestion}
-      </div>
-    ) : this.state.isTestCompleted ? (
-      renderSummary
-    ) : (
-      <>
-        {this.props.testInfo}
-        <button onClick={this.handleStartTest} className="btn success">
-          Start test now
-        </button>
-      </>
-    );
-
-    return <div className="TestActive">{showTest}</div>;
-  }
+  return <div className="TestActive">
+    {showTest}
+  </div>;
 }
 
 export default LessonTest;

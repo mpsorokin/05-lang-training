@@ -8,7 +8,7 @@ import WordsWriting from "../../../../framework/WordsWriting/WordsWriting.jsx";
 // Import vocabulary data
 import vocabData from '../../../../data_source/vocabulary_data';
 
-const LessonTypesSwitcher = () => {
+function LessonTypesSwitcher() {
   const { courseId, unitId, lessonType } = useParams();
 
   const getLessonData = (courseId, unitId) => {
@@ -53,6 +53,6 @@ const LessonTypesSwitcher = () => {
       {renderedComponent}
     </div>
   );
-};
+}
 
 export default LessonTypesSwitcher;
