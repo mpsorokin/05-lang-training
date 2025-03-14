@@ -1,0 +1,129 @@
+.App {
+  text-align: center;
+}
+
+body {
+  background-color: #F0F0F0;
+}
+
+ul.navigation_top {
+  margin-top: 0;
+}
+
+.navigation_top li {
+  display: inline-block;
+  list-style-type: none;
+  margin-right: 20px;
+  background-color: #fff;
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #777;
+  padding: 4px 12px;
+}
+
+.navigation_top li a {
+  color: #000;
+  text-decoration: none;
+}
+
+.btn {
+  border: none;
+  color: white;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.success {
+  background-color: #4CAF50;
+}
+
+.success:hover {
+  background-color: #46a049;
+}
+
+.info {
+  background-color: #2196F3;
+}
+
+.info:hover {
+  background-color: #0b7dda;
+}
+
+.blank {
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 5px;
+  box-shadow: 1px 3px #aaa;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.blank:hover {
+  background-color: #ddd;
+}
+
+.selected_button {
+  background-color: lightblue;
+  color: #1E90FF;
+  border: 2px solid #1E90FF;
+  border-radius: 5px;
+  box-shadow: 1px 3px #aaa;
+  font-size: 22px;
+  font-weight: 700;
+  outline: none;
+}
+
+.check_inactive {
+  background-color: #aaa;
+  border-radius: 5px;
+  box-shadow: 1px 3px #aaa;
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+  outline: none;
+}
+
+.check_active {
+  background-color: #1E90FF;
+  border-radius: 5px;
+  box-shadow: 1px 3px #aaa;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  outline: none;
+}
+
+.right_answer {
+  background-color: lightgreen;
+  border-radius: 5px;
+  border: 2px solid green;
+  font-size: 22px;
+  font-weight: 700;
+  color: green;
+  outline: none;
+}
+
+.wrong_answer {
+  background-color: lightcoral;
+  border-radius: 5px;
+  border: 2px solid red;
+  font-size: 22px;
+  font-weight: 700;
+  color: black;
+  outline: none;
+}
+
+.questionVariantsContainer {
+  display: flex;
+  flex-direction: column;
+  transition: .3s;
+}
+
+.questionVariantsContainer button {
+  width: 85%;
+  margin: 8px auto;
+}

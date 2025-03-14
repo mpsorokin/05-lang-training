@@ -1,0 +1,16 @@
+.ielts_writing_task_one_list {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.ielts_writing_task_one_list > div {
+    background-color: #fff;
+    padding: 8px;
+    border: 1px solid #777;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.ielts_writing_task_one_list > div > ul {
+    padding-left: 20px;
+}

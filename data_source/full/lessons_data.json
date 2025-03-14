@@ -1,0 +1,86 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "name": "New Headway - Upper-Intermediate",
+      "description": "Lorem ipsum dolor",
+      "lessons": [
+        {
+          "id": 1,
+          "name": "Unit 1. Part 1",
+          "words": [
+            {
+              "id": 1,
+              "english": "book",
+              "russian": "книга"
+            }, {
+              "id": 2,
+              "english": "table",
+              "russian": "стол"
+            }, {
+              "id": 3,
+              "english": "car",
+              "russian": "машина"
+            }, {
+              "id": 4,
+              "english": "street",
+              "russian": "улица"
+            }, {
+              "id": 5,
+              "english": "laptop",
+              "russian": "ноутбук"
+            }, {
+              "id": 6,
+              "english": "tree",
+              "russian": "дерево"
+            }, {
+              "id": 7,
+              "english": "lamp",
+              "russian": "лампа"
+            }, {
+              "id": 8,
+              "english": "glass",
+              "russian": "стекло"
+            }]
+        }, {
+          "id": 1,
+          "name": "Unit 1. Part 2",
+          "words": [
+            {
+              "id": 1,
+              "english": "book",
+              "russian": "книга"
+            }, {
+              "id": 2,
+              "english": "table",
+              "russian": "стол"
+            }, {
+              "id": 3,
+              "english": "car",
+              "russian": "машина"
+            }, {
+              "id": 4,
+              "english": "street",
+              "russian": "улица"
+            }, {
+              "id": 5,
+              "english": "laptop",
+              "russian": "ноутбук"
+            }, {
+              "id": 6,
+              "english": "tree",
+              "russian": "дерево"
+            }, {
+              "id": 7,
+              "english": "lamp",
+              "russian": "лампа"
+            }, {
+              "id": 8,
+              "english": "glass",
+              "russian": "стекло"
+            }]
+        }
+      ]
+    }
+  ]
+}

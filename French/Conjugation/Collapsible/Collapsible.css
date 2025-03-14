@@ -1,0 +1,30 @@
+.collapsible-container {
+    margin: 10px 0;
+}
+
+.collapsible-button {
+    background-color: #777;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 24px;
+}
+
+.collapsible-content {
+    padding: 0 24px;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+
+.collapsible-content ul {
+    padding-left: 0;
+}
+
+.collapsible-content li {
+    list-style-type: none;
+    font-size: 20px;
+}

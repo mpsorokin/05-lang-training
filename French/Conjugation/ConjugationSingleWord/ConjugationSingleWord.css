@@ -1,0 +1,20 @@
+.conjugation_single_word_container {
+    padding: 10px;
+    width: 90%;
+    margin: 16px auto;
+}
+
+.conjugation_single_word_container h2 {
+    margin: 10px 0;
+}
+
+.conjugation_single_word_container h3 {
+    margin: 5px 0;
+}
+
+.conjugation_block {
+    padding: 10px 4px 20px;
+    margin: 16px 0;
+    background-color: #fff;
+    box-shadow: 1px 3px #aaa;
+}

@@ -1,0 +1,48 @@
+.results_container {
+    overflow-x:auto;
+}
+
+.results_container table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    margin: 8px;
+}
+
+.results_container th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+.results_container tr:nth-child(even){
+    background-color: #f2f2f2
+}
+
+span.table_wrong_answers {
+    margin: 2px 4px;
+    padding: 0 4px;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+td.wrong_answers {
+    max-width: 300px;
+    min-width: 200px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    /*hyphens: auto;*/
+    line-height: 28px;
+}
+
+td.wrong_answers span {
+    display: inline-block;
+}
+
+.table_date {
+    min-width: 90px;
+}
+
+.success_rate_td {
+    min-width: 72px;
+}

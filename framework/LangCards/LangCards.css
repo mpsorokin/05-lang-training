@@ -1,0 +1,13 @@
+.finished_words_button_container {
+
+}
+
+.finished_words_button_container > div {
+    border: 1px solid #777;
+    background-color: #fff;
+    box-shadow: 1px 3px #aaa;
+    border-radius: 8px;
+    padding: 16px 32px;
+    width: 70%;
+    margin: 32px auto;
+}
